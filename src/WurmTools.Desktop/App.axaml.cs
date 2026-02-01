@@ -17,23 +17,38 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var dbPath = GetDatabasePath();
-            var db = new DatabaseConnection(dbPath);
-            db.EnsureSchema();
-
-            // If the database is empty, import from source data
-            var repo = new ItemRepository(db);
-            if (repo.GetCountAsync().GetAwaiter().GetResult() == 0)
+            try
             {
-                var sourceDir = GetSourceDataPath();
-                if (Directory.Exists(sourceDir))
-                {
-                    DatabaseBuilder.BuildFromSourceAsync(sourceDir, db).GetAwaiter().GetResult();
-                }
-            }
+                var dbPath = GetDatabasePath();
+                var db = new DatabaseConnection(dbPath);
+                db.EnsureSchema();
 
-            var viewModel = new ItemBrowserViewModel(repo);
-            desktop.MainWindow = new MainWindow { DataContext = viewModel };
+                // If the database is empty, import from source data
+                var repo = new ItemRepository(db);
+                if (repo.GetCountAsync().GetAwaiter().GetResult() == 0)
+                {
+                    var sourceDir = GetSourceDataPath();
+                    if (Directory.Exists(sourceDir))
+                    {
+                        DatabaseBuilder.BuildFromSourceAsync(sourceDir, db).GetAwaiter().GetResult();
+                    }
+                }
+
+                var viewModel = new ItemBrowserViewModel(repo);
+                desktop.MainWindow = new MainWindow { DataContext = viewModel };
+            }
+            catch (Exception ex)
+            {
+                desktop.MainWindow = new MainWindow
+                {
+                    Content = new Avalonia.Controls.TextBlock
+                    {
+                        Text = $"Startup error:\n\n{ex}",
+                        Margin = new Avalonia.Thickness(20),
+                        TextWrapping = Avalonia.Media.TextWrapping.Wrap
+                    }
+                };
+            }
         }
 
         base.OnFrameworkInitializationCompleted();
@@ -50,14 +65,20 @@ public partial class App : Application
 
     private static string GetSourceDataPath()
     {
-        // Look for data/source relative to the executable
-        var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-        var sourceDir = Path.Combine(baseDir, "..", "..", "..", "..", "..", "data", "source");
-        if (Directory.Exists(sourceDir))
-            return Path.GetFullPath(sourceDir);
+        // Walk up from executable directory looking for data/source
+        var dir = AppDomain.CurrentDomain.BaseDirectory;
+        for (var i = 0; i < 8; i++)
+        {
+            var candidate = Path.Combine(dir, "data", "source");
+            if (Directory.Exists(candidate))
+                return Path.GetFullPath(candidate);
+
+            var parent = Directory.GetParent(dir);
+            if (parent == null) break;
+            dir = parent.FullName;
+        }
 
         // Fallback: look relative to working directory
-        sourceDir = Path.Combine(Directory.GetCurrentDirectory(), "data", "source");
-        return sourceDir;
+        return Path.Combine(Directory.GetCurrentDirectory(), "data", "source");
     }
 }
