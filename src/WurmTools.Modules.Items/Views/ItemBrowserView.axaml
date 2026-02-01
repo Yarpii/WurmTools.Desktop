@@ -4,92 +4,193 @@
              x:Class="WurmTools.Modules.Items.Views.ItemBrowserView"
              x:DataType="vm:ItemBrowserViewModel">
 
-    <Grid RowDefinitions="Auto,*" Margin="12">
+    <Grid RowDefinitions="Auto,*" Margin="16,12,16,8">
 
-        <!-- Search bar -->
-        <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+        <!-- Header: search + item count -->
+        <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,10">
             <TextBox Grid.Column="0"
-                     Watermark="Search items..."
-                     Text="{Binding SearchText, Mode=TwoWay}"
-                     Margin="0,0,8,0" />
-            <TextBlock Grid.Column="1"
-                       Text="{Binding TotalCount, StringFormat='{}{0} items in database'}"
-                       VerticalAlignment="Center"
-                       Opacity="0.6" />
+                     Classes="search"
+                     Watermark="Search items by name, category, or material..."
+                     Text="{Binding SearchText, Mode=TwoWay}" />
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Margin="12,0,0,0"
+                        Spacing="6">
+                <Border Classes="badge badgeCategory">
+                    <TextBlock Text="{Binding TotalCount, StringFormat='{}{0} items'}"
+                               FontSize="12"
+                               Foreground="#8899aa" />
+                </Border>
+            </StackPanel>
         </Grid>
 
-        <!-- Main content: list + detail panel -->
-        <Grid Grid.Row="1" ColumnDefinitions="*,1.2*">
+        <!-- Main split: list + detail -->
+        <Grid Grid.Row="1" ColumnDefinitions="320,*">
 
-            <!-- Item list -->
+            <!-- Item list panel -->
             <ListBox Grid.Column="0"
+                     Classes="itemList"
                      ItemsSource="{Binding Items}"
                      SelectedItem="{Binding SelectedItem}"
-                     Margin="0,0,6,0">
+                     Margin="0,0,8,0"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Margin="4">
-                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
-                            <StackPanel Orientation="Horizontal" Opacity="0.6">
-                                <TextBlock Text="{Binding Category}" />
-                                <TextBlock Text=" · " />
-                                <TextBlock Text="{Binding Material}" />
+                        <Grid ColumnDefinitions="Auto,*" Margin="2">
+                            <!-- Color accent bar based on category feel -->
+                            <Border Grid.Column="0"
+                                    Width="3"
+                                    CornerRadius="2"
+                                    Background="#e94560"
+                                    Margin="0,0,10,0" />
+                            <StackPanel Grid.Column="1" Spacing="2">
+                                <TextBlock Text="{Binding Name}"
+                                           FontWeight="SemiBold"
+                                           FontSize="14"
+                                           Foreground="#e0e0e0" />
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <Border Classes="badge badgeCategory">
+                                        <TextBlock Text="{Binding Category}"
+                                                   FontSize="11"
+                                                   Foreground="#7799bb" />
+                                    </Border>
+                                    <Border Classes="badge badgeMaterial">
+                                        <TextBlock Text="{Binding Material}"
+                                                   FontSize="11"
+                                                   Foreground="#aa77cc" />
+                                    </Border>
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
+                        </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
 
             <!-- Detail panel -->
             <Border Grid.Column="1"
-                    BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
-                    BorderThickness="1"
-                    CornerRadius="4"
-                    Padding="16"
-                    Margin="6,0,0,0"
+                    Classes="detailPanel"
+                    Margin="8,0,0,0"
                     IsVisible="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}}">
                 <ScrollViewer>
-                    <StackPanel DataContext="{Binding SelectedItem}" Spacing="8">
-                        <TextBlock Text="{Binding Name}" FontSize="22" FontWeight="Bold" />
-                        <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Opacity="0.8" />
+                    <StackPanel DataContext="{Binding SelectedItem}" Spacing="4">
 
-                        <Separator Margin="0,4" />
+                        <!-- Item title -->
+                        <TextBlock Text="{Binding Name}"
+                                   FontSize="26"
+                                   FontWeight="Bold"
+                                   Foreground="#ffffff"
+                                   Margin="0,0,0,4" />
 
-                        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" Margin="0,4">
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Category:" FontWeight="SemiBold" Margin="0,0,12,4" />
-                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Category}" />
+                        <!-- Description -->
+                        <TextBlock Text="{Binding Description}"
+                                   TextWrapping="Wrap"
+                                   FontSize="14"
+                                   Foreground="#8899aa"
+                                   Margin="0,0,0,8" />
 
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Material:" FontWeight="SemiBold" Margin="0,0,12,4" />
-                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Material}" />
+                        <!-- Tag row -->
+                        <WrapPanel Orientation="Horizontal" Margin="0,0,0,4">
+                            <Border Classes="badge badgeCategory" Margin="0,0,6,6">
+                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                    <TextBlock Text="Category:" FontSize="11" Foreground="#556" />
+                                    <TextBlock Text="{Binding Category}" FontSize="11" Foreground="#7799bb" FontWeight="SemiBold" />
+                                </StackPanel>
+                            </Border>
+                            <Border Classes="badge badgeMaterial" Margin="0,0,6,6">
+                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                    <TextBlock Text="Material:" FontSize="11" Foreground="#556" />
+                                    <TextBlock Text="{Binding Material}" FontSize="11" Foreground="#aa77cc" FontWeight="SemiBold" />
+                                </StackPanel>
+                            </Border>
+                            <Border Classes="badge badgeSkill" Margin="0,0,6,6">
+                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                    <TextBlock Text="Skill:" FontSize="11" Foreground="#556" />
+                                    <TextBlock Text="{Binding Skill}" FontSize="11" Foreground="#77cc99" FontWeight="SemiBold" />
+                                </StackPanel>
+                            </Border>
+                            <Border Classes="badge badgeContainer"
+                                    Margin="0,0,6,6"
+                                    IsVisible="{Binding IsContainer}">
+                                <TextBlock Text="Container" FontSize="11" Foreground="#ccaa77" FontWeight="SemiBold" />
+                            </Border>
+                        </WrapPanel>
 
-                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Weight:" FontWeight="SemiBold" Margin="0,0,12,4" />
-                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Weight, StringFormat='{}{0:F1} kg'}" />
+                        <Separator />
 
-                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Skill:" FontWeight="SemiBold" Margin="0,0,12,4" />
-                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Skill}" />
+                        <!-- Stats section -->
+                        <TextBlock Classes="sectionHeader" Text="STATS" />
 
-                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Difficulty:" FontWeight="SemiBold" Margin="0,0,12,4" />
-                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Difficulty, StringFormat='{}{0:F0}'}" />
-
-                            <TextBlock Grid.Row="5" Grid.Column="0" Text="Container:" FontWeight="SemiBold" Margin="0,0,12,4" />
-                            <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding IsContainer}" />
+                        <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto" Margin="0,0,0,4">
+                            <!-- Weight -->
+                            <StackPanel Grid.Column="0" Spacing="2">
+                                <TextBlock Classes="propLabel" Text="WEIGHT" />
+                                <TextBlock Classes="propValue" Text="{Binding Weight, StringFormat='{}{0:F1} kg'}" />
+                            </StackPanel>
+                            <!-- Difficulty -->
+                            <StackPanel Grid.Column="1" Spacing="2">
+                                <TextBlock Classes="propLabel" Text="DIFFICULTY" />
+                                <TextBlock Classes="propValue" Text="{Binding Difficulty, StringFormat='{}{0:F0}'}" />
+                            </StackPanel>
+                            <!-- Improvable -->
+                            <StackPanel Grid.Column="2" Spacing="2">
+                                <TextBlock Classes="propLabel" Text="IMPROVABLE" />
+                                <TextBlock Classes="propValue" Text="{Binding IsImproved}" />
+                            </StackPanel>
                         </Grid>
 
-                        <Separator Margin="0,4" />
+                        <Separator />
 
-                        <TextBlock Text="Notes" FontWeight="SemiBold" />
-                        <TextBlock Text="{Binding Notes}" TextWrapping="Wrap" Opacity="0.8" />
+                        <!-- Notes section -->
+                        <TextBlock Classes="sectionHeader" Text="NOTES" />
+                        <TextBlock Text="{Binding Notes}"
+                                   TextWrapping="Wrap"
+                                   FontSize="13"
+                                   Foreground="#aabbcc"
+                                   LineHeight="20" />
+
+                        <!-- Wiki link -->
+                        <TextBlock Classes="sectionHeader" Text="REFERENCE" Margin="0,16,0,6" />
+                        <TextBlock Text="{Binding WikiUrl}"
+                                   FontSize="12"
+                                   Foreground="#e94560"
+                                   TextDecorations="Underline"
+                                   Cursor="Hand" />
+
                     </StackPanel>
                 </ScrollViewer>
             </Border>
 
-            <!-- Placeholder when nothing selected -->
-            <TextBlock Grid.Column="1"
-                       Text="Select an item to view details"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Opacity="0.4"
-                       IsVisible="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNull}}" />
+            <!-- Empty state placeholder -->
+            <Border Grid.Column="1"
+                    Classes="detailPanel"
+                    Margin="8,0,0,0"
+                    IsVisible="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNull}}">
+                <StackPanel HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Spacing="8">
+                    <Border Width="48" Height="48"
+                            CornerRadius="24"
+                            Background="#0f3460"
+                            HorizontalAlignment="Center">
+                        <TextBlock Text="?"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Foreground="#e94560"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Border>
+                    <TextBlock Text="Select an item"
+                               FontSize="16"
+                               Foreground="#556"
+                               HorizontalAlignment="Center" />
+                    <TextBlock Text="Choose an item from the list to view its details"
+                               FontSize="12"
+                               Foreground="#334"
+                               HorizontalAlignment="Center" />
+                </StackPanel>
+            </Border>
+
         </Grid>
     </Grid>
 </UserControl>

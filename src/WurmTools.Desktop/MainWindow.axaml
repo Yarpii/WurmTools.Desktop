@@ -3,9 +3,61 @@
         xmlns:items="clr-namespace:WurmTools.Modules.Items.Views;assembly=WurmTools.Modules.Items"
         x:Class="WurmTools.Desktop.MainWindow"
         Title="WurmTools Desktop"
-        Width="1024" Height="680"
-        WindowStartupLocation="CenterScreen">
+        Width="1100" Height="720"
+        MinWidth="800" MinHeight="500"
+        WindowStartupLocation="CenterScreen"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="PreferSystemChrome"
+        ExtendClientAreaTitleBarHeightHint="36">
 
-    <items:ItemBrowserView />
+    <Grid RowDefinitions="36,*,32">
+
+        <!-- Custom title bar area -->
+        <Border Grid.Row="0"
+                Background="#12122a"
+                IsHitTestVisible="False">
+            <Grid ColumnDefinitions="Auto,*">
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            Margin="14,0,0,0"
+                            Spacing="8">
+                    <!-- App icon placeholder -->
+                    <Border Width="18" Height="18"
+                            CornerRadius="3"
+                            Background="#e94560" />
+                    <TextBlock Text="WurmTools"
+                               FontSize="13"
+                               FontWeight="Bold"
+                               Foreground="#e0e0e0"
+                               VerticalAlignment="Center" />
+                    <TextBlock Text="Desktop"
+                               FontSize="13"
+                               Foreground="#667"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main content -->
+        <items:ItemBrowserView Grid.Row="1" />
+
+        <!-- Status bar -->
+        <Border Grid.Row="2"
+                Background="#12122a"
+                Padding="14,0">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Text="Wurm Online Item Database"
+                           FontSize="11"
+                           Foreground="#556"
+                           VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1"
+                           Text="v0.1.0"
+                           FontSize="11"
+                           Foreground="#445"
+                           VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+
+    </Grid>
 
 </Window>

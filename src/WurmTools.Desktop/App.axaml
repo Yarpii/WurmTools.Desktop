@@ -2,6 +2,106 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="WurmTools.Desktop.App">
     <Application.Styles>
-        <FluentTheme />
+        <FluentTheme DensityStyle="Compact" />
+
+        <!-- Global style overrides -->
+        <Style Selector="Window">
+            <Setter Property="Background" Value="#1a1a2e" />
+        </Style>
+
+        <Style Selector="TextBlock">
+            <Setter Property="Foreground" Value="#e0e0e0" />
+        </Style>
+
+        <!-- Search box styling -->
+        <Style Selector="TextBox.search">
+            <Setter Property="Background" Value="#16213e" />
+            <Setter Property="Foreground" Value="#e0e0e0" />
+            <Setter Property="BorderBrush" Value="#0f3460" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="12,10" />
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+        <Style Selector="TextBox.search:focus">
+            <Setter Property="BorderBrush" Value="#e94560" />
+        </Style>
+        <Style Selector="TextBox.search /template/ TextBlock#PART_Watermark">
+            <Setter Property="Foreground" Value="#667" />
+        </Style>
+
+        <!-- Item list styling -->
+        <Style Selector="ListBox.itemList">
+            <Setter Property="Background" Value="#16213e" />
+            <Setter Property="BorderBrush" Value="#0f3460" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="4" />
+        </Style>
+        <Style Selector="ListBox.itemList ListBoxItem">
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Padding" Value="10,8" />
+        </Style>
+        <Style Selector="ListBox.itemList ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#1a1a40" />
+        </Style>
+        <Style Selector="ListBox.itemList ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#0f3460" />
+        </Style>
+
+        <!-- Detail panel -->
+        <Style Selector="Border.detailPanel">
+            <Setter Property="Background" Value="#16213e" />
+            <Setter Property="BorderBrush" Value="#0f3460" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="20" />
+        </Style>
+
+        <!-- Property label -->
+        <Style Selector="TextBlock.propLabel">
+            <Setter Property="Foreground" Value="#8899aa" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+        <Style Selector="TextBlock.propValue">
+            <Setter Property="Foreground" Value="#e0e0e0" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Medium" />
+        </Style>
+
+        <!-- Badges -->
+        <Style Selector="Border.badge">
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Padding" Value="8,3" />
+        </Style>
+        <Style Selector="Border.badgeCategory">
+            <Setter Property="Background" Value="#1b2a4a" />
+        </Style>
+        <Style Selector="Border.badgeMaterial">
+            <Setter Property="Background" Value="#2a1b3d" />
+        </Style>
+        <Style Selector="Border.badgeSkill">
+            <Setter Property="Background" Value="#1b3d2a" />
+        </Style>
+        <Style Selector="Border.badgeContainer">
+            <Setter Property="Background" Value="#3d2a1b" />
+        </Style>
+
+        <!-- Section headers -->
+        <Style Selector="TextBlock.sectionHeader">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="#556" />
+            <Setter Property="Margin" Value="0,12,0,6" />
+        </Style>
+
+        <!-- Separator override -->
+        <Style Selector="Separator">
+            <Setter Property="Background" Value="#0f3460" />
+            <Setter Property="Margin" Value="0,8" />
+            <Setter Property="Height" Value="1" />
+        </Style>
+
     </Application.Styles>
 </Application>

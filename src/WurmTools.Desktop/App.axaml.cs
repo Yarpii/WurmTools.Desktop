@@ -24,12 +24,28 @@ public partial class App : Application
             desktop.MainWindow = window;
 
             // Show a loading message while we initialize the database
-            window.Content = new TextBlock
+            window.Content = new StackPanel
             {
-                Text = "Loading...",
                 HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
-                FontSize = 18
+                Spacing = 12,
+                Children =
+                {
+                    new Border
+                    {
+                        Width = 40, Height = 40,
+                        CornerRadius = new CornerRadius(6),
+                        Background = Avalonia.Media.Brush.Parse("#e94560"),
+                        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                    },
+                    new TextBlock
+                    {
+                        Text = "Loading WurmTools...",
+                        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                        FontSize = 16,
+                        Foreground = Avalonia.Media.Brush.Parse("#8899aa"),
+                    }
+                }
             };
 
             // Perform async initialization after the window is shown
