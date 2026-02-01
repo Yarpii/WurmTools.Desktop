@@ -1,0 +1,33 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## NuGet
+**/packages/*
+*.nupkg
+project.lock.json
+project.fragment.lock.json
+
+## IDE
+.vs/
+.idea/
+*.swp
+*~
+
+## Build output
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+## Data builds (generated)
+data/builds/
+*.sqlite
+
+## OS
+.DS_Store
+Thumbs.db

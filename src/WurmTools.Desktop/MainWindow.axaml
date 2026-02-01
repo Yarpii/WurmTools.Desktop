@@ -1,0 +1,11 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:items="clr-namespace:WurmTools.Modules.Items.Views;assembly=WurmTools.Modules.Items"
+        x:Class="WurmTools.Desktop.MainWindow"
+        Title="WurmTools Desktop"
+        Width="1024" Height="680"
+        WindowStartupLocation="CenterScreen">
+
+    <items:ItemBrowserView />
+
+</Window>

@@ -1,0 +1,95 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:WurmTools.Modules.Items.ViewModels"
+             x:Class="WurmTools.Modules.Items.Views.ItemBrowserView"
+             x:DataType="vm:ItemBrowserViewModel">
+
+    <Grid RowDefinitions="Auto,*" Margin="12">
+
+        <!-- Search bar -->
+        <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+            <TextBox Grid.Column="0"
+                     Watermark="Search items..."
+                     Text="{Binding SearchText, Mode=TwoWay}"
+                     Margin="0,0,8,0" />
+            <TextBlock Grid.Column="1"
+                       Text="{Binding TotalCount, StringFormat='{}{0} items in database'}"
+                       VerticalAlignment="Center"
+                       Opacity="0.6" />
+        </Grid>
+
+        <!-- Main content: list + detail panel -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,1.2*">
+
+            <!-- Item list -->
+            <ListBox Grid.Column="0"
+                     ItemsSource="{Binding Items}"
+                     SelectedItem="{Binding SelectedItem}"
+                     Margin="0,0,6,0">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="4">
+                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                            <StackPanel Orientation="Horizontal" Opacity="0.6">
+                                <TextBlock Text="{Binding Category}" />
+                                <TextBlock Text=" · " />
+                                <TextBlock Text="{Binding Material}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <!-- Detail panel -->
+            <Border Grid.Column="1"
+                    BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    Padding="16"
+                    Margin="6,0,0,0"
+                    IsVisible="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}}">
+                <ScrollViewer>
+                    <StackPanel DataContext="{Binding SelectedItem}" Spacing="8">
+                        <TextBlock Text="{Binding Name}" FontSize="22" FontWeight="Bold" />
+                        <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Opacity="0.8" />
+
+                        <Separator Margin="0,4" />
+
+                        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" Margin="0,4">
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Category:" FontWeight="SemiBold" Margin="0,0,12,4" />
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Category}" />
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Material:" FontWeight="SemiBold" Margin="0,0,12,4" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Material}" />
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Weight:" FontWeight="SemiBold" Margin="0,0,12,4" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Weight, StringFormat='{}{0:F1} kg'}" />
+
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Skill:" FontWeight="SemiBold" Margin="0,0,12,4" />
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Skill}" />
+
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Difficulty:" FontWeight="SemiBold" Margin="0,0,12,4" />
+                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Difficulty, StringFormat='{}{0:F0}'}" />
+
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="Container:" FontWeight="SemiBold" Margin="0,0,12,4" />
+                            <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding IsContainer}" />
+                        </Grid>
+
+                        <Separator Margin="0,4" />
+
+                        <TextBlock Text="Notes" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding Notes}" TextWrapping="Wrap" Opacity="0.8" />
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <!-- Placeholder when nothing selected -->
+            <TextBlock Grid.Column="1"
+                       Text="Select an item to view details"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Opacity="0.4"
+                       IsVisible="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNull}}" />
+        </Grid>
+    </Grid>
+</UserControl>
