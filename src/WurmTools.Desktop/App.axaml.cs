@@ -21,18 +21,14 @@ public partial class App : Application
             var db = new DatabaseConnection(dbPath);
             db.EnsureSchema();
 
-            // If the database is empty, try to build from source data
+            // If the database is empty, import from source data
             var repo = new ItemRepository(db);
             if (repo.GetCountAsync().GetAwaiter().GetResult() == 0)
             {
                 var sourceDir = GetSourceDataPath();
                 if (Directory.Exists(sourceDir))
                 {
-                    DatabaseBuilder.BuildFromSourceAsync(sourceDir, dbPath).GetAwaiter().GetResult();
-                    // Reconnect after rebuild
-                    db.Dispose();
-                    db = new DatabaseConnection(dbPath);
-                    repo = new ItemRepository(db);
+                    DatabaseBuilder.BuildFromSourceAsync(sourceDir, db).GetAwaiter().GetResult();
                 }
             }
 

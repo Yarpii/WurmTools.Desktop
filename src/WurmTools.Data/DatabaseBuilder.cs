@@ -5,15 +5,10 @@ using WurmTools.Data.Import;
 public class DatabaseBuilder
 {
     /// <summary>
-    /// Builds (or rebuilds) the SQLite database from source JSON files.
+    /// Imports source JSON files into an existing database connection.
     /// </summary>
-    public static async Task<int> BuildFromSourceAsync(string sourceDirectory, string databasePath)
+    public static async Task<int> BuildFromSourceAsync(string sourceDirectory, DatabaseConnection db)
     {
-        // Remove existing database to rebuild fresh
-        if (File.Exists(databasePath))
-            File.Delete(databasePath);
-
-        using var db = new DatabaseConnection(databasePath);
         db.EnsureSchema();
 
         var importer = new JsonItemImporter(db);
